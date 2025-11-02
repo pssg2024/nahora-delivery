@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nahpora Delivery</title>
+    <style>
+        :root {
+            --primary: #ff6b35;
+            --secondary: #f7931e;
+            --dark: #333;
+            --light: #f8f9fa;
+            --success: #28a745;
+            --danger: #dc3545;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: var(--dark);
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        nav ul li a:hover {
+            opacity: 0.8;
+        }
+        
+        .status-loja {
+            background-color: var(--success);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .status-loja.fechada {
+            background-color: var(--danger);
+        }
+        
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 4rem 1rem;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary);
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: white;
+            color: var(--primary);
+        }
+        
+        .section-title {
+            text-align: center;
+            margin: 3rem 0 2rem;
+            font-size: 2rem;
+            color: var(--dark);
+        }
+        
+        .categorias {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .categoria-btn {
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .categoria-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .cardapio {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .produto-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .produto-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .produto-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .produto-info {
+            padding: 1.5rem;
+        }
+        
+        .produto-nome {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .produto-descricao {
+            color: #666;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .produto-preco {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .produto-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .quantidade {
+            display: flex;
+            align-items: center;
+        }
+        
+        .quantidade-btn {
+            background-color: #eee;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .quantidade-valor {
+            margin: 0 0.5rem;
+            font-weight: bold;
+        }
+        
+        .carrinho-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background-color: white;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            transition: right 0.3s;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .carrinho-sidebar.open {
+            right: 0;
+        }
+        
+        .carrinho-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .carrinho-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .close-carrinho {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .carrinho-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        
+        .carrinho-item {
+            display: flex;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .carrinho-item-img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-right: 1rem;
+        }
+        
+        .carrinho-item-info {
+            flex: 1;
+        }
+        
+        .carrinho-item-nome {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .carrinho-item-preco {
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .carrinho-item-actions {
+            display: flex;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+        
+        .carrinho-footer {
+            padding: 1.5rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .carrinho-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+        }
+        
+        .overlay.active {
+            display: block;
+        }
+        
+        .checkout-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1001;
+            display: none;
+        }
+        
+        .checkout-modal.active {
+            display: block;
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        .admin-login {
+            max-width: 400px;
+            margin: 5rem auto;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .admin-panel {
+            padding: 2rem 0;
+        }
+        
+        .admin-nav {
+            background-color: var(--dark);
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .admin-nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        .admin-nav ul li {
+            margin-right: 1.5rem;
+        }
+        
+        .admin-nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .admin-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .admin-section h2 {
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        table th, table td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .actions button {
+            padding: 0.3rem 0.8rem;
+            margin-right: 0.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .btn-edit {
+            background-color: #17a2b8;
+            color: white;
+        }
+        
+        .btn-delete {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+        }
+
+        /* Novos estilos para upload de imagem */
+        .imagem-preview {
+            margin-top: 10px;
+            text-align: center;
+            display: none;
+        }
+        
+        .preview-img {
+            max-width: 200px;
+            max-height: 150px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .file-input-label {
+            display: block;
+            padding: 0.8rem;
+            background-color: #f8f9fa;
+            border: 1px dashed #ddd;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .file-input-label:hover {
+            background-color: #e9ecef;
+        }
+        
+        @media (max-width: 768px) {
+            .carrinho-sidebar {
+                width: 100%;
+            }
+            
+            .cardapio {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">Nahpora Delivery</div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="nav-link" data-page="home">Início</a></li>
+                    <li><a href="#" class="nav-link" data-page="cardapio">Cardápio</a></li>
+                    <li><a href="#" class="nav-link" data-page="admin">Admin</a></li>
+                    <li><span class="status-loja" id="statusLoja">Aberto</span></li>
+                    <li><a href="#" id="carrinhoBtn">Carrinho (<span id="carrinhoCount">0</span>)</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Página Inicial -->
+    <section id="home-page" class="page active">
+        <div class="hero">
+            <div class="container">
+                <h1>Nahpora Delivery</h1>
+                <p>Os melhores pratos da região, entregues diretamente na sua casa. Peça agora e aproveite!</p>
+                <a href="#" class="btn nav-link" data-page="cardapio">Ver Cardápio</a>
+                <a href="#" class="btn btn-secondary" id="carrinhoHeroBtn">Meu Carrinho</a>
+            </div>
+        </div>
+
+        <div class="container">
+            <h2 class="section-title">Cardápio em Destaque</h2>
+            
+            <div class="categorias">
+                <button class="categoria-btn active" data-categoria="todos">Todos</button>
+                <button class="categoria-btn" data-categoria="lanches">Lanches</button>
+                <button class="categoria-btn" data-categoria="pizzas">Pizzas</button>
+                <button class="categoria-btn" data-categoria="bebidas">Bebidas</button>
+                <button class="categoria-btn" data-categoria="sobremesas">Sobremesas</button>
+            </div>
+            
+            <div class="cardapio" id="cardapio-container">
+                <!-- Produtos serão carregados aqui via JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Página do Cardápio -->
+    <section id="cardapio-page" class="page hidden">
+        <div class="container">
+            <h2 class="section-title">Nosso Cardápio Completo</h2>
+            
+            <div class="categorias">
+                <button class="categoria-btn active" data-categoria="todos">Todos</button>
+                <button class="categoria-btn" data-categoria="lanches">Lanches</button>
+                <button class="categoria-btn" data-categoria="pizzas">Pizzas</button>
+                <button class="categoria-btn" data-categoria="bebidas">Bebidas</button>
+                <button class="categoria-btn" data-categoria="sobremesas">Sobremesas</button>
+            </div>
+            
+            <div class="cardapio" id="cardapio-full-container">
+                <!-- Produtos serão carregados aqui via JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Página de Admin -->
+    <section id="admin-page" class="page hidden">
+        <div class="container">
+            <!-- Login Admin -->
+            <div id="admin-login" class="admin-login">
+                <h2 style="text-align: center; margin-bottom: 1.5rem;">Login Administrativo</h2>
+                <div class="form-group">
+                    <label class="form-label">Usuário</label>
+                    <input type="text" class="form-control" id="admin-usuario">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Senha</label>
+                    <input type="password" class="form-control" id="admin-senha">
+                </div>
+                <button class="btn" id="admin-login-btn" style="width: 100%;">Entrar</button>
+            </div>
+            
+            <!-- Painel Admin -->
+            <div id="admin-panel" class="admin-panel hidden">
+                <div class="admin-nav">
+                    <ul>
+                        <li><a href="#" class="admin-nav-link active" data-section="produtos">Produtos</a></li>
+                        <li><a href="#" class="admin-nav-link" data-section="pedidos">Pedidos</a></li>
+                        <li><a href="#" class="admin-nav-link" data-section="configuracoes">Configurações</a></li>
+                        <li><a href="#" id="admin-logout">Sair</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Seção Produtos -->
+                <div id="admin-produtos" class="admin-section">
+                    <h2>Gerenciar Produtos</h2>
+                    <button class="btn" id="novo-produto-btn">Novo Produto</button>
+                    
+                    <table style="margin-top: 1.5rem;">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Categoria</th>
+                                <th>Preço</th>
+                                <th>Disponível</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="produtos-table">
+                            <!-- Produtos serão carregados aqui -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Seção Pedidos -->
+                <div id="admin-pedidos" class="admin-section hidden">
+                    <h2>Pedidos Recebidos</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Cliente</th>
+                                <th>Endereço</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pedidos-table">
+                            <!-- Pedidos serão carregados aqui -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Seção Configurações -->
+                <div id="admin-configuracoes" class="admin-section hidden">
+                    <h2>Configurações da Loja</h2>
+                    <div class="form-group">
+                        <label class="form-label">Status da Loja</label>
+                        <div>
+                            <input type="radio" id="loja-aberta" name="status-loja" value="true" checked>
+                            <label for="loja-aberta">Aberta</label>
+                            <input type="radio" id="loja-fechada" name="status-loja" value="false" style="margin-left: 1rem;">
+                            <label for="loja-fechada">Fechada</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Telefone WhatsApp</label>
+                        <input type="text" class="form-control" id="telefone-whatsapp" value="21973960077">
+                    </div>
+                    <button class="btn" id="salvar-config">Salvar Configurações</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Carrinho Sidebar -->
+    <div class="carrinho-sidebar" id="carrinhoSidebar">
+        <div class="carrinho-header">
+            <h3 class="carrinho-title">Seu Carrinho</h3>
+            <button class="close-carrinho" id="closeCarrinho">&times;</button>
+        </div>
+        <div class="carrinho-items" id="carrinhoItems">
+            <!-- Itens do carrinho serão carregados aqui -->
+        </div>
+        <div class="carrinho-footer">
+            <div class="carrinho-total">
+                <span>Total:</span>
+                <span id="carrinhoTotal">R$ 0,00</span>
+            </div>
+            <button class="btn" id="finalizarPedidoBtn" style="width: 100%;">Finalizar Pedido</button>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Modal de Checkout -->
+    <div class="checkout-modal" id="checkoutModal">
+        <div class="modal-header">
+            <h3 class="modal-title">Finalizar Pedido</h3>
+            <button class="close-modal" id="closeCheckoutModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="checkoutForm">
+                <div class="form-group">
+                    <label class="form-label">Nome Completo</label>
+                    <input type="text" class="form-control" id="cliente-nome" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Telefone</label>
+                    <input type="text" class="form-control" id="cliente-telefone" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Endereço de Entrega</label>
+                    <textarea class="form-control" id="cliente-endereco" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Forma de Pagamento</label>
+                    <select class="form-control" id="forma-pagamento" required>
+                        <option value="">Selecione...</option>
+                        <option value="dinheiro">Dinheiro</option>
+                        <option value="cartao">Cartão de Crédito/Débito</option>
+                        <option value="pix">PIX</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Observações</label>
+                    <textarea class="form-control" id="observacoes" rows="2"></textarea>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" id="confirmarPedidoBtn">Confirmar Pedido</button>
+        </div>
+    </div>
+
+    <!-- Modal de Produto (Admin) ATUALIZADO PARA UPLOAD -->
+    <div class="checkout-modal" id="produtoModal">
+        <div class="modal-header">
+            <h3 class="modal-title" id="produtoModalTitle">Novo Produto</h3>
+            <button class="close-modal" id="closeProdutoModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="produtoForm" enctype="multipart/form-data">
+                <input type="hidden" id="produto-id">
+                <div class="form-group">
+                    <label class="form-label">Nome do Produto</label>
+                    <input type="text" class="form-control" id="produto-nome" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Descrição</label>
+                    <textarea class="form-control" id="produto-descricao" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Preço (R$)</label>
+                    <input type="number" class="form-control" id="produto-preco" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Categoria</label>
+                    <select class="form-control" id="produto-categoria" required>
+                        <option value="">Selecione...</option>
+                        <option value="lanches">Lanches</option>
+                        <option value="pizzas">Pizzas</option>
+                        <option value="bebidas">Bebidas</option>
+                        <option value="sobremesas">Sobremesas</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Imagem do Produto</label>
+                    <div class="file-input-wrapper">
+                        <div class="file-input-label" id="file-input-label">
+                            Clique para selecionar uma imagem ou arraste aqui
+                        </div>
+                        <input type="file" class="form-control" id="produto-imagem" accept="image/*">
+                    </div>
+                    <small>Formatos: JPG, PNG, GIF (máx. 5MB)</small>
+                    <div class="imagem-preview" id="imagem-preview">
+                        <img class="preview-img" id="preview-img" src="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="produto-disponivel" checked> Disponível
+                    </label>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" id="salvarProdutoBtn">Salvar Produto</button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Nahpora Delivery. Todos os direitos reservados.</p>
+            <p>Telefone: (21) 97396-0077</p>
+        </div>
+    </footer>
+
+    <script>
+        // Dados agora vêm do banco de dados
+        let produtos = [];
+        let pedidos = [];
+        let carrinho = [];
+        let config = {
+            loja_aberta: true,
+            telefone_whatsapp: "21973960077"
+        };
+
+        // Elementos DOM
+        const pages = document.querySelectorAll('.page');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const carrinhoBtn = document.getElementById('carrinhoBtn');
+        const carrinhoHeroBtn = document.getElementById('carrinhoHeroBtn');
+        const carrinhoSidebar = document.getElementById('carrinhoSidebar');
+        const closeCarrinho = document.getElementById('closeCarrinho');
+        const overlay = document.getElementById('overlay');
+        const checkoutModal = document.getElementById('checkoutModal');
+        const closeCheckoutModal = document.getElementById('closeCheckoutModal');
+        const finalizarPedidoBtn = document.getElementById('finalizarPedidoBtn');
+        const confirmarPedidoBtn = document.getElementById('confirmarPedidoBtn');
+        const carrinhoCount = document.getElementById('carrinhoCount');
+        const carrinhoItems = document.getElementById('carrinhoItems');
+        const carrinhoTotal = document.getElementById('carrinhoTotal');
+        const cardapioContainer = document.getElementById('cardapio-container');
+        const cardapioFullContainer = document.getElementById('cardapio-full-container');
+        const categoriaBtns = document.querySelectorAll('.categoria-btn');
+        const statusLoja = document.getElementById('statusLoja');
+        const adminLoginBtn = document.getElementById('admin-login-btn');
+        const adminLogin = document.getElementById('admin-login');
+        const adminPanel = document.getElementById('admin-panel');
+        const adminNavLinks = document.querySelectorAll('.admin-nav-link');
+        const adminSections = document.querySelectorAll('.admin-section');
+        const adminLogout = document.getElementById('admin-logout');
+        const produtosTable = document.getElementById('produtos-table');
+        const pedidosTable = document.getElementById('pedidos-table');
+        const novoProdutoBtn = document.getElementById('novo-produto-btn');
+        const produtoModal = document.getElementById('produtoModal');
+        const closeProdutoModal = document.getElementById('closeProdutoModal');
+        const salvarProdutoBtn = document.getElementById('salvarProdutoBtn');
+        const salvarConfig = document.getElementById('salvar-config');
+        const produtoImagemInput = document.getElementById('produto-imagem');
+        const previewImg = document.getElementById('preview-img');
+        const imagemPreview = document.getElementById('imagem-preview');
+        const fileInputLabel = document.getElementById('file-input-label');
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            carregarProdutos();
+            carregarConfiguracoes();
+            atualizarCarrinho();
+            
+            // Verificar se já está logado como admin
+            if (localStorage.getItem('adminLogado') === 'true') {
+                adminLogin.classList.add('hidden');
+                adminPanel.classList.remove('hidden');
+                carregarProdutosAdmin();
+                carregarPedidosAdmin();
+            }
+        });
+
+        // Carregar produtos do banco de dados
+        async function carregarProdutos() {
+            try {
+                const response = await fetch('/api/produtos');
+                if (response.ok) {
+                    produtos = await response.json();
+                    exibirProdutos();
+                } else {
+                    console.error('Erro ao carregar produtos:', response.status);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar produtos:', error);
+                // Fallback para dados locais se o servidor não estiver disponível
+                exibirProdutos();
+            }
+        }
+
+        // Carregar configurações
+        async function carregarConfiguracoes() {
+            try {
+                const response = await fetch('/api/config');
+                if (response.ok) {
+                    const configData = await response.json();
+                    config.loja_aberta = configData.loja_aberta === 'true';
+                    config.telefone_whatsapp = configData.telefone_whatsapp;
+                    atualizarStatusLoja();
+                }
+            } catch (error) {
+                console.error('Erro ao carregar configurações:', error);
+            }
+        }
+
+        // Navegação entre páginas
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const pageId = this.getAttribute('data-page') + '-page';
+                
+                pages.forEach(page => {
+                    page.classList.add('hidden');
+                });
+                
+                document.getElementById(pageId).classList.remove('hidden');
+                
+                // Se for a página do cardápio, carregar produtos
+                if (pageId === 'cardapio-page') {
+                    carregarCardapioCompleto();
+                }
+            });
+        });
+
+        // Navegação no painel admin
+        adminNavLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const sectionId = 'admin-' + this.getAttribute('data-section');
+                
+                adminNavLinks.forEach(navLink => {
+                    navLink.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                adminSections.forEach(section => {
+                    section.classList.add('hidden');
+                });
+                
+                document.getElementById(sectionId).classList.remove('hidden');
+                
+                // Carregar dados específicos da seção
+                if (sectionId === 'admin-pedidos') {
+                    carregarPedidosAdmin();
+                }
+            });
+        });
+
+        // Carrinho
+        carrinhoBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            abrirCarrinho();
+        });
+
+        carrinhoHeroBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            abrirCarrinho();
+        });
+
+        closeCarrinho.addEventListener('click', function() {
+            fecharCarrinho();
+        });
+
+        overlay.addEventListener('click', function() {
+            fecharCarrinho();
+            fecharModal(checkoutModal);
+            fecharModal(produtoModal);
+        });
+
+        function abrirCarrinho() {
+            carrinhoSidebar.classList.add('open');
+            overlay.classList.add('active');
+        }
+
+        function fecharCarrinho() {
+            carrinhoSidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        }
+
+        function fecharModal(modal) {
+            modal.classList.remove('active');
+            overlay.classList.remove('active');
+        }
+
+        // Finalizar pedido
+        finalizarPedidoBtn.addEventListener('click', function() {
+            if (carrinho.length === 0) {
+                alert('Seu carrinho está vazio!');
+                return;
+            }
+            
+            if (!config.loja_aberta) {
+                alert('Desculpe, a loja está fechada no momento. Tente novamente mais tarde.');
+                return;
+            }
+            
+            checkoutModal.classList.add('active');
+            overlay.classList.add('active');
+        });
+
+        closeCheckoutModal.addEventListener('click', function() {
+            fecharModal(checkoutModal);
+        });
+
+        confirmarPedidoBtn.addEventListener('click', async function() {
+            const nome = document.getElementById('cliente-nome').value;
+            const telefone = document.getElementById('cliente-telefone').value;
+            const endereco = document.getElementById('cliente-endereco').value;
+            const formaPagamento = document.getElementById('forma-pagamento').value;
+            const observacoes = document.getElementById('observacoes').value;
+            
+            if (!nome || !telefone || !endereco || !formaPagamento) {
+                alert('Por favor, preencha todos os campos obrigatórios!');
+                return;
+            }
+            
+            try {
+                // Enviar pedido para o servidor
+                const response = await fetch('/api/pedidos', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        cliente: { nome, telefone, endereco },
+                        itens: carrinho,
+                        endereco_entrega: endereco,
+                        forma_pagamento: formaPagamento,
+                        observacoes,
+                        total: calcularTotalCarrinho()
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    
+                    // Enviar para WhatsApp
+                    enviarPedidoWhatsApp({
+                        id: result.pedidoId,
+                        cliente: { nome, telefone, endereco },
+                        itens: carrinho,
+                        forma_pagamento: formaPagamento,
+                        observacoes,
+                        total: calcularTotalCarrinho(),
+                        data: new Date().toLocaleString('pt-BR')
+                    });
+                    
+                    // Limpar carrinho
+                    carrinho = [];
+                    atualizarCarrinho();
+                    
+                    // Fechar modais
+                    fecharModal(checkoutModal);
+                    fecharCarrinho();
+                    
+                    // Limpar formulário
+                    document.getElementById('checkoutForm').reset();
+                    
+                    alert('Pedido enviado com sucesso! Em breve entraremos em contato.');
+                } else {
+                    alert('Erro ao enviar pedido. Tente novamente.');
+                }
+            } catch (error) {
+                console.error('Erro ao enviar pedido:', error);
+                alert('Erro ao enviar pedido. Verifique sua conexão.');
+            }
+        });
+
+        // Funções do cardápio
+        function exibirProdutos() {
+            carregarCardapio();
+            carregarCardapioCompleto();
+        }
+
+        function carregarCardapio() {
+            if (!cardapioContainer) return;
+            
+            cardapioContainer.innerHTML = '';
+            
+            produtos.filter(produto => produto.disponivel).forEach(produto => {
+                const produtoCard = criarProdutoCard(produto);
+                cardapioContainer.appendChild(produtoCard);
+            });
+        }
+
+        function carregarCardapioCompleto() {
+            if (!cardapioFullContainer) return;
+            
+            cardapioFullContainer.innerHTML = '';
+            
+            produtos.filter(produto => produto.disponivel).forEach(produto => {
+                const produtoCard = criarProdutoCard(produto);
+                cardapioFullContainer.appendChild(produtoCard);
+            });
+        }
+
+        function criarProdutoCard(produto) {
+            const card = document.createElement('div');
+            card.className = 'produto-card';
+            card.innerHTML = `
+                <img src="${produto.imagem_url}" alt="${produto.nome}" class="produto-img">
+                <div class="produto-info">
+                    <h3 class="produto-nome">${produto.nome}</h3>
+                    <p class="produto-descricao">${produto.descricao}</p>
+                    <div class="produto-preco">R$ ${parseFloat(produto.preco).toFixed(2)}</div>
+                    <div class="produto-actions">
+                        <div class="quantidade">
+                            <button class="quantidade-btn" data-action="decrease" data-id="${produto.id}">-</button>
+                            <span class="quantidade-valor" id="quantidade-${produto.id}">0</span>
+                            <button class="quantidade-btn" data-action="increase" data-id="${produto.id}">+</button>
+                        </div>
+                        <button class="btn adicionar-carrinho" data-id="${produto.id}">Adicionar</button>
+                    </div>
+                </div>
+            `;
+            
+            // Event listeners para os botões
+            const decreaseBtn = card.querySelector('[data-action="decrease"]');
+            const increaseBtn = card.querySelector('[data-action="increase"]');
+            const addBtn = card.querySelector('.adicionar-carrinho');
+            
+            decreaseBtn.addEventListener('click', function() {
+                const id = parseInt(this.getAttribute('data-id'));
+                const quantidadeElement = document.getElementById(`quantidade-${id}`);
+                let quantidade = parseInt(quantidadeElement.textContent);
+                
+                if (quantidade > 0) {
+                    quantidade--;
+                    quantidadeElement.textContent = quantidade;
+                }
+            });
+            
+            increaseBtn.addEventListener('click', function() {
+                const id = parseInt(this.getAttribute('data-id'));
+                const quantidadeElement = document.getElementById(`quantidade-${id}`);
+                let quantidade = parseInt(quantidadeElement.textContent);
+                
+                quantidade++;
+                quantidadeElement.textContent = quantidade;
+            });
+            
+            addBtn.addEventListener('click', function() {
+                const id = parseInt(this.getAttribute('data-id'));
+                const quantidadeElement = document.getElementById(`quantidade-${id}`);
+                const quantidade = parseInt(quantidadeElement.textContent);
+                
+                if (quantidade > 0) {
+                    adicionarAoCarrinho(id, quantidade);
+                    quantidadeElement.textContent = 0;
+                } else {
+                    alert('Selecione a quantidade desejada!');
+                }
+            });
+            
+            return card;
+        }
+
+        // Filtro por categoria
+        categoriaBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                categoriaBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const categoria = this.getAttribute('data-categoria');
+                filtrarCardapio(categoria);
+            });
+        });
+
+        function filtrarCardapio(categoria) {
+            const containers = [cardapioContainer, cardapioFullContainer];
+            
+            containers.forEach(container => {
+                if (!container) return;
+                
+                const produtosCards = container.querySelectorAll('.produto-card');
+                
+                produtosCards.forEach(card => {
+                    const produtoId = parseInt(card.querySelector('.adicionar-carrinho').getAttribute('data-id'));
+                    const produto = produtos.find(p => p.id === produtoId);
+                    
+                    if (categoria === 'todos' || produto.categoria === categoria) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // Funções do carrinho
+        function adicionarAoCarrinho(produtoId, quantidade) {
+            const produto = produtos.find(p => p.id === produtoId);
+            
+            if (!produto) return;
+            
+            const itemExistente = carrinho.find(item => item.id === produtoId);
+            
+            if (itemExistente) {
+                itemExistente.quantidade += quantidade;
+            } else {
+                carrinho.push({
+                    id: produto.id,
+                    nome: produto.nome,
+                    preco: produto.preco,
+                    quantidade: quantidade,
+                    imagem_url: produto.imagem_url
+                });
+            }
+            
+            atualizarCarrinho();
+        }
+
+        function removerDoCarrinho(produtoId) {
+            carrinho = carrinho.filter(item => item.id !== produtoId);
+            atualizarCarrinho();
+        }
+
+        function atualizarQuantidadeCarrinho(produtoId, novaQuantidade) {
+            const item = carrinho.find(item => item.id === produtoId);
+            
+            if (item) {
+                if (novaQuantidade <= 0) {
+                    removerDoCarrinho(produtoId);
+                } else {
+                    item.quantidade = novaQuantidade;
+                }
+            }
+            
+            atualizarCarrinho();
+        }
+
+        function calcularTotalCarrinho() {
+            return carrinho.reduce((total, item) => total + (parseFloat(item.preco) * item.quantidade), 0);
+        }
+
+        function atualizarCarrinho() {
+            // Atualizar contador
+            const totalItens = carrinho.reduce((total, item) => total + item.quantidade, 0);
+            carrinhoCount.textContent = totalItens;
+            
+            // Atualizar itens no sidebar
+            carrinhoItems.innerHTML = '';
+            
+            if (carrinho.length === 0) {
+                carrinhoItems.innerHTML = '<p style="text-align: center; padding: 2rem;">Seu carrinho está vazio</p>';
+                carrinhoTotal.textContent = 'R$ 0,00';
+                return;
+            }
+            
+            carrinho.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'carrinho-item';
+                itemElement.innerHTML = `
+                    <img src="${item.imagem_url}" alt="${item.nome}" class="carrinho-item-img">
+                    <div class="carrinho-item-info">
+                        <div class="carrinho-item-nome">${item.nome}</div>
+                        <div class="carrinho-item-preco">R$ ${parseFloat(item.preco).toFixed(2)}</div>
+                        <div class="carrinho-item-actions">
+                            <button class="quantidade-btn" data-action="decrease-carrinho" data-id="${item.id}">-</button>
+                            <span class="quantidade-valor">${item.quantidade}</span>
+                            <button class="quantidade-btn" data-action="increase-carrinho" data-id="${item.id}">+</button>
+                            <button class="btn" style="margin-left: auto; padding: 0.3rem 0.8rem;" data-action="remove-carrinho" data-id="${item.id}">Remover</button>
+                        </div>
+                    </div>
+                `;
+                
+                carrinhoItems.appendChild(itemElement);
+            });
+            
+            // Atualizar total
+            carrinhoTotal.textContent = `R$ ${calcularTotalCarrinho().toFixed(2)}`;
+            
+            // Adicionar event listeners aos botões do carrinho
+            document.querySelectorAll('[data-action="decrease-carrinho"]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    const item = carrinho.find(item => item.id === id);
+                    
+                    if (item) {
+                        atualizarQuantidadeCarrinho(id, item.quantidade - 1);
+                    }
+                });
+            });
+            
+            document.querySelectorAll('[data-action="increase-carrinho"]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    const item = carrinho.find(item => item.id === id);
+                    
+                    if (item) {
+                        atualizarQuantidadeCarrinho(id, item.quantidade + 1);
+                    }
+                });
+            });
+            
+            document.querySelectorAll('[data-action="remove-carrinho"]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    removerDoCarrinho(id);
+                });
+            });
+        }
+
+        // Funções do admin
+        adminLoginBtn.addEventListener('click', async function() {
+            const usuario = document.getElementById('admin-usuario').value;
+            const senha = document.getElementById('admin-senha').value;
+            
+            try {
+                const response = await fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ usuario, senha })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    localStorage.setItem('adminLogado', 'true');
+                    adminLogin.classList.add('hidden');
+                    adminPanel.classList.remove('hidden');
+                    await carregarProdutosAdmin();
+                    await carregarPedidosAdmin();
+                } else {
+                    alert('Usuário ou senha incorretos!');
+                }
+            } catch (error) {
+                console.error('Erro no login:', error);
+                alert('Erro ao fazer login. Verifique o console.');
+            }
+        });
+
+        adminLogout.addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.setItem('adminLogado', 'false');
+            adminLogin.classList.remove('hidden');
+            adminPanel.classList.add('hidden');
+            
+            // Voltar para a página inicial
+            pages.forEach(page => {
+                page.classList.add('hidden');
+            });
+            document.getElementById('home-page').classList.remove('hidden');
+        });
+
+        // Carregar produtos do admin (do banco)
+        async function carregarProdutosAdmin() {
+            try {
+                const response = await fetch('/api/admin/produtos');
+                if (response.ok) {
+                    const produtosDB = await response.json();
+                    
+                    produtosTable.innerHTML = '';
+                    
+                    produtosDB.forEach(produto => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${produto.id}</td>
+                            <td>${produto.nome}</td>
+                            <td>${produto.categoria}</td>
+                            <td>R$ ${parseFloat(produto.preco).toFixed(2)}</td>
+                            <td>${produto.disponivel ? 'Sim' : 'Não'}</td>
+                            <td class="actions">
+                                <button class="btn-edit" data-id="${produto.id}">Editar</button>
+                                <button class="btn-delete" data-id="${produto.id}">Excluir</button>
+                            </td>
+                        `;
+                        
+                        produtosTable.appendChild(row);
+                    });
+                    
+                    // Event listeners para os botões
+                    document.querySelectorAll('.btn-edit').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const id = parseInt(this.getAttribute('data-id'));
+                            editarProduto(id);
+                        });
+                    });
+                    
+                    document.querySelectorAll('.btn-delete').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const id = parseInt(this.getAttribute('data-id'));
+                            excluirProduto(id);
+                        });
+                    });
+                }
+            } catch (error) {
+                console.error('Erro ao carregar produtos admin:', error);
+            }
+        }
+
+        // Carregar pedidos do admin (do banco)
+        async function carregarPedidosAdmin() {
+            try {
+                const response = await fetch('/api/admin/pedidos');
+                if (response.ok) {
+                    const pedidosDB = await response.json();
+                    
+                    pedidosTable.innerHTML = '';
+                    
+                    if (pedidosDB.length === 0) {
+                        pedidosTable.innerHTML = '<tr><td colspan="6" style="text-align: center;">Nenhum pedido recebido</td></tr>';
+                        return;
+                    }
+                    
+                    pedidosDB.forEach(pedido => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${pedido.id}</td>
+                            <td>${pedido.cliente_nome}</td>
+                            <td>${pedido.endereco}</td>
+                            <td>R$ ${parseFloat(pedido.total).toFixed(2)}</td>
+                            <td>
+                                <select class="status-pedido" data-id="${pedido.id}">
+                                    <option value="pendente" ${pedido.status === 'pendente' ? 'selected' : ''}>Pendente</option>
+                                    <option value="preparando" ${pedido.status === 'preparando' ? 'selected' : ''}>Preparando</option>
+                                    <option value="enviado" ${pedido.status === 'enviado' ? 'selected' : ''}>Enviado</option>
+                                    <option value="entregue" ${pedido.status === 'entregue' ? 'selected' : ''}>Entregue</option>
+                                    <option value="cancelado" ${pedido.status === 'cancelado' ? 'selected' : ''}>Cancelado</option>
+                                </select>
+                            </td>
+                            <td class="actions">
+                                <button class="btn-delete" data-id="${pedido.id}" data-type="pedido">Excluir</button>
+                            </td>
+                        `;
+                        
+                        pedidosTable.appendChild(row);
+                    });
+                    
+                    // Event listeners para os selects de status
+                    document.querySelectorAll('.status-pedido').forEach(select => {
+                        select.addEventListener('change', async function() {
+                            const id = parseInt(this.getAttribute('data-id'));
+                            const novoStatus = this.value;
+                            
+                            try {
+                                const response = await fetch(`/api/admin/pedidos/${id}/status`, {
+                                    method: 'PUT',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ status: novoStatus })
+                                });
+                                
+                                if (!response.ok) {
+                                    alert('Erro ao atualizar status do pedido');
+                                }
+                            } catch (error) {
+                                console.error('Erro ao atualizar status:', error);
+                            }
+                        });
+                    });
+                    
+                    // Event listeners para os botões de excluir pedido
+                    document.querySelectorAll('.btn-delete[data-type="pedido"]').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const id = parseInt(this.getAttribute('data-id'));
+                            excluirPedido(id);
+                        });
+                    });
+                }
+            } catch (error) {
+                console.error('Erro ao carregar pedidos admin:', error);
+            }
+        }
+
+        // Upload de imagem - preview
+        produtoImagemInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            
+            if (file) {
+                // Atualizar label
+                fileInputLabel.textContent = file.name;
+                
+                // Mostrar preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    imagemPreview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            } else {
+                fileInputLabel.textContent = 'Clique para selecionar uma imagem ou arraste aqui';
+                imagemPreview.style.display = 'none';
+            }
+        });
+
+        // Drag and drop para imagens
+        fileInputLabel.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.style.backgroundColor = '#e9ecef';
+        });
+
+        fileInputLabel.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.style.backgroundColor = '#f8f9fa';
+        });
+
+        fileInputLabel.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.style.backgroundColor = '#f8f9fa';
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                produtoImagemInput.files = files;
+                const event = new Event('change');
+                produtoImagemInput.dispatchEvent(event);
+            }
+        });
+
+        novoProdutoBtn.addEventListener('click', function() {
+            document.getElementById('produtoModalTitle').textContent = 'Novo Produto';
+            document.getElementById('produtoForm').reset();
+            document.getElementById('produto-id').value = '';
+            fileInputLabel.textContent = 'Clique para selecionar uma imagem ou arraste aqui';
+            imagemPreview.style.display = 'none';
+            produtoModal.classList.add('active');
+            overlay.classList.add('active');
+        });
+
+        closeProdutoModal.addEventListener('click', function() {
+            fecharModal(produtoModal);
+        });
+
+        // Salvar produto com upload de imagem
+        salvarProdutoBtn.addEventListener('click', async function() {
+            const id = document.getElementById('produto-id').value;
+            const nome = document.getElementById('produto-nome').value;
+            const descricao = document.getElementById('produto-descricao').value;
+            const preco = document.getElementById('produto-preco').value;
+            const categoria = document.getElementById('produto-categoria').value;
+            const disponivel = document.getElementById('produto-disponivel').checked;
+            const imagemFile = produtoImagemInput.files[0];
+            
+            if (!nome || !preco || !categoria) {
+                alert('Por favor, preencha todos os campos obrigatórios!');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('id', id);
+            formData.append('nome', nome);
+            formData.append('descricao', descricao);
+            formData.append('preco', preco);
+            formData.append('categoria', categoria);
+            formData.append('disponivel', disponivel);
+            
+            if (imagemFile) {
+                formData.append('imagem', imagemFile);
+            }
+            
+            try {
+                const response = await fetch('/api/admin/produtos', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    await carregarProdutos();
+                    await carregarProdutosAdmin();
+                    fecharModal(produtoModal);
+                    alert('Produto salvo com sucesso!');
+                } else {
+                    alert('Erro ao salvar produto');
+                }
+            } catch (error) {
+                console.error('Erro ao salvar produto:', error);
+                alert('Erro ao salvar produto. Verifique o console.');
+            }
+        });
+
+        async function editarProduto(id) {
+            try {
+                const response = await fetch('/api/admin/produtos');
+                if (response.ok) {
+                    const produtosDB = await response.json();
+                    const produto = produtosDB.find(p => p.id === id);
+                    
+                    if (!produto) return;
+                    
+                    document.getElementById('produtoModalTitle').textContent = 'Editar Produto';
+                    document.getElementById('produto-id').value = produto.id;
+                    document.getElementById('produto-nome').value = produto.nome;
+                    document.getElementById('produto-descricao').value = produto.descricao;
+                    document.getElementById('produto-preco').value = produto.preco;
+                    document.getElementById('produto-categoria').value = produto.categoria;
+                    document.getElementById('produto-disponivel').checked = produto.disponivel;
+                    
+                    // Se há imagem, mostrar preview
+                    if (produto.imagem_url) {
+                        previewImg.src = produto.imagem_url;
+                        imagemPreview.style.display = 'block';
+                        fileInputLabel.textContent = 'Imagem atual: ' + produto.imagem_url.split('/').pop();
+                    } else {
+                        fileInputLabel.textContent = 'Clique para selecionar uma imagem ou arraste aqui';
+                        imagemPreview.style.display = 'none';
+                    }
+                    
+                    produtoModal.classList.add('active');
+                    overlay.classList.add('active');
+                }
+            } catch (error) {
+                console.error('Erro ao carregar produto para edição:', error);
+            }
+        }
+
+        async function excluirProduto(id) {
+            if (confirm('Tem certeza que deseja excluir este produto?')) {
+                try {
+                    const response = await fetch(`/api/admin/produtos/${id}`, {
+                        method: 'DELETE'
+                    });
+                    
+                    if (response.ok) {
+                        await carregarProdutos();
+                        await carregarProdutosAdmin();
+                        alert('Produto excluído com sucesso!');
+                    } else {
+                        alert('Erro ao excluir produto');
+                    }
+                } catch (error) {
+                    console.error('Erro ao excluir produto:', error);
+                    alert('Erro ao excluir produto. Verifique o console.');
+                }
+            }
+        }
+
+        async function excluirPedido(id) {
+            if (confirm('Tem certeza que deseja excluir este pedido?')) {
+                try {
+                    const response = await fetch(`/api/admin/pedidos/${id}`, {
+                        method: 'DELETE'
+                    });
+                    
+                    if (response.ok) {
+                        await carregarPedidosAdmin();
+                        alert('Pedido excluído com sucesso!');
+                    } else {
+                        alert('Erro ao excluir pedido');
+                    }
+                } catch (error) {
+                    console.error('Erro ao excluir pedido:', error);
+                    alert('Erro ao excluir pedido. Verifique o console.');
+                }
+            }
+        }
+
+        // Configurações
+        salvarConfig.addEventListener('click', async function() {
+            const lojaAberta = document.getElementById('loja-aberta').checked;
+            const telefoneWhatsApp = document.getElementById('telefone-whatsapp').value;
+            
+            try {
+                const response = await fetch('/api/config', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        loja_aberta: lojaAberta,
+                        telefone_whatsapp: telefoneWhatsApp
+                    })
+                });
+                
+                if (response.ok) {
+                    config.loja_aberta = lojaAberta;
+                    config.telefone_whatsapp = telefoneWhatsApp;
+                    atualizarStatusLoja();
+                    alert('Configurações salvas com sucesso!');
+                } else {
+                    alert('Erro ao salvar configurações');
+                }
+            } catch (error) {
+                console.error('Erro ao salvar configurações:', error);
+                alert('Erro ao salvar configurações. Verifique o console.');
+            }
+        });
+
+        function atualizarStatusLoja() {
+            if (config.loja_aberta) {
+                statusLoja.textContent = 'Aberto';
+                statusLoja.classList.remove('fechada');
+            } else {
+                statusLoja.textContent = 'Fechado';
+                statusLoja.classList.add('fechada');
+            }
+        }
+
+        // Função para enviar pedido para WhatsApp
+        function enviarPedidoWhatsApp(pedido) {
+            let mensagem = `*NOVO PEDIDO - NAHPORA DELIVERY*%0A%0A`;
+            mensagem += `*Cliente:* ${pedido.cliente.nome}%0A`;
+            mensagem += `*Telefone:* ${pedido.cliente.telefone}%0A`;
+            mensagem += `*Endereço:* ${pedido.cliente.endereco}%0A`;
+            mensagem += `*Forma de Pagamento:* ${pedido.forma_pagamento}%0A`;
+            
+            if (pedido.observacoes) {
+                mensagem += `*Observações:* ${pedido.observacoes}%0A`;
+            }
+            
+            mensagem += `%0A*ITENS DO PEDIDO:*%0A`;
+            
+            pedido.itens.forEach(item => {
+                mensagem += `- ${item.quantidade}x ${item.nome} - R$ ${(parseFloat(item.preco) * item.quantidade).toFixed(2)}%0A`;
+            });
+            
+            mensagem += `%0A*TOTAL: R$ ${pedido.total.toFixed(2)}*%0A%0A`;
+            mensagem += `Pedido realizado em: ${pedido.data}`;
+            
+            const url = `https://wa.me/${config.telefone_whatsapp}?text=${mensagem}`;
+            
+            // Abrir WhatsApp em uma nova aba
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
