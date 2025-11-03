@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const { Pool } = require('pg');
 const path = require('path');
@@ -260,7 +259,7 @@ app.put('/api/config', async (req, res) => {
   }
 });
 
-// Rota para login admin
+// Rota para login admin - CORRIGIDA: administradores em vez de administrators
 app.post('/api/admin/login', async (req, res) => {
   const { usuario, senha } = req.body;
   
