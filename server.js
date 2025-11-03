@@ -6,11 +6,32 @@ const multer = require('multer');
 const fs = require('fs');
 const app = express();
 
-// Configuração do banco de dados PARA NUVEM
+// =========================================================
+// CONFIGURAÇÃO DO BANCO CORRIGIDA - CONECTA AO BANCO NAHORA_DELIVERY_DB
+// =========================================================
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgresql://postgres:230655@localhost:5432/nahpora_delivery',
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  connectionString: 'postgresql://nahora_delivery_db_user:DjJS3iSDSiNwXcQU69Yjpr84vMeK3rcp@dpg-d43v2hjipnbc73cc8uk0-a/nahora_delivery_db',
+  ssl: { rejectUnauthorized: false }
 });
+
+// =========================================================
+// DEBUG - TESTAR CONEXÃO COM BANCO
+// =========================================================
+async function testarConexaoBanco() {
+  try {
+    console.log('🔍 Testando conexão com banco de dados...');
+    const client = await pool.connect();
+    const dbInfo = await client.query('SELECT current_database(), current_user');
+    console.log('✅ Conectado ao banco:', dbInfo.rows[0]);
+    
+    const tables = await client.query("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'");
+    console.log('📊 Tabelas disponíveis:', tables.rows.map(row => row.table_name));
+    
+    client.release();
+  } catch (err) {
+    console.error('❌ Erro ao conectar com banco:', err.message);
+  }
+}
 
 // Configuração do Multer para upload de imagens - ADAPTADO PARA NUVEM
 const storage = multer.diskStorage({
@@ -57,6 +78,24 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Servir arquivos uploads
 app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
+
+// =========================================================
+// ROTA DE DEBUG - REMOVA DEPOIS QUE TUDO ESTIVER FUNCIONANDO
+// =========================================================
+app.get('/debug', async (req, res) => {
+  try {
+    const dbInfo = await pool.query('SELECT current_database(), current_user');
+    const tables = await pool.query("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'");
+    
+    res.json({
+      database: dbInfo.rows[0],
+      tables: tables.rows,
+      message: 'Conexão com banco de dados OK!'
+    });
+  } catch (err) {
+    res.json({ error: err.message });
+  }
+});
 
 // Rota raiz para servir o frontend
 app.get('/', (req, res) => {
@@ -247,7 +286,10 @@ app.get('/health', (req, res) => {
 // Porta dinâmica para nuvem
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, '0.0.0.0', async () => {
   console.log(`Servidor rodando na porta ${PORT}`);
   console.log(`Acesse: http://localhost:${PORT}`);
+  
+  // Executar teste de conexão
+  await testarConexaoBanco();
 });
