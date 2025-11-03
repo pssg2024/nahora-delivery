@@ -39,6 +39,25 @@ const upload = multer({
 });
 
 // =========================================================
+// DEBUG - TESTAR CONEXÃO COM BANCO
+// =========================================================
+async function testarConexaoBanco() {
+  try {
+    console.log('🔍 Testando conexão com banco de dados...');
+    const client = await pool.connect();
+    const dbInfo = await client.query('SELECT current_database(), current_user');
+    console.log('✅ Conectado ao banco:', dbInfo.rows[0]);
+    
+    const tables = await client.query("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'");
+    console.log('📊 Tabelas disponíveis:', tables.rows.map(row => row.table_name));
+    
+    client.release();
+  } catch (err) {
+    console.error('❌ Erro ao conectar com banco:', err.message);
+  }
+}
+
+// =========================================================
 // MIDDLEWARES
 // =========================================================
 app.use((req, res, next) => {
@@ -254,7 +273,10 @@ app.get('/health', (req, res) => {
 // Porta dinâmica para nuvem
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, '0.0.0.0', async () => {
   console.log(`Servidor rodando na porta ${PORT}`);
   console.log(`Acesse: http://localhost:${PORT}`);
+  
+  // Executar teste de conexão
+  await testarConexaoBanco();
 });
